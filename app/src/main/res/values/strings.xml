@@ -1,16 +1,20 @@
 <resources>
-  <string name="app_name">Stock Hawk</string>
-
-  <string name="action_example">Example action</string>
-
-  <string name="action_settings">Settings</string>
-  <string name="action_change_units">Change Units</string>
-  <string name="symbol_search">Symbol Search</string>
-  <string name="content_test">Search for a Stock Symbol</string>
-  <string name="input_hint">FB</string>
-  <string name="input_prefill"></string>
-  <string name="network_toast">Uh-oh! This app requires an internet connection</string>
-    <string name="title_activity_chart">ChartActivity</string>
-
-    <string name="hello_world">Hello world!</string>
+  <string name="app_name" translatable="false">Stock Hawk</string>
+  <string name="action_example" translatable="true">Example action</string>
+  <string name="action_settings" translatable="true">About</string>
+  <string name="action_change_units" translatable="true">Change Units</string>
+  <string name="symbol_search" translatable="true">Symbol Search</string>
+  <string name="content_test" translatable="true">Search for a Stock Symbol</string>
+  <string name="input_hint" translatable="false">FB</string>
+  <string name="input_prefill" translatable="true"></string>
+  <string name="network_toast" translatable="true">Uh-oh! This app requires an internet connection</string>
+  <string name="title_activity_chart" translatable="true">ChartActivity</string>
+  <string name="title_activity_detail" translatable="true">DetailActivity</string>
+  <string name="home_screen" translatable="true">Navigate Back To Main Screen</string>
+  <string name="widget_title" translatable="true">Stocks Details</string>
+  <string name="title_activity_about" translatable="true">AboutActivity</string>
+  <string name="aboutLibraries_description_showIcon" translatable="false">true</string>
+  <string name="aboutLibraries_description_showVersion" translatable="false">true</string>
+  <string name="aboutLibraries_description_text" translatable="false">STOCK HAWK\nA Simple Application to show latest stocks using Yahoo Finance API.\nMade by Anuj Chandra.</string>
+  <string name="add_stocks">Add New Stocks</string>
 </resources>

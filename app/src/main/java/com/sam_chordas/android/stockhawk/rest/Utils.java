@@ -1,7 +1,10 @@
 package com.sam_chordas.android.stockhawk.rest;
 
 import android.content.ContentProviderOperation;
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
+
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
 import java.util.ArrayList;
@@ -12,11 +15,17 @@ import org.json.JSONObject;
 /**
  * Created by sam_chordas on 10/8/15.
  */
-public class Utils {
+public  class Utils {
 
   private static String LOG_TAG = Utils.class.getSimpleName();
 
   public static boolean showPercent = true;
+  public static Context context;
+
+  public Utils(Context context){
+    this.context = context;
+  }
+
 
   public static ArrayList quoteJsonToContentVals(String JSON){
     ArrayList<ContentProviderOperation> batchOperations = new ArrayList<>();
@@ -75,21 +84,42 @@ public class Utils {
         QuoteProvider.Quotes.CONTENT_URI);
     try {
       String change = jsonObject.getString("Change");
-      builder.withValue(QuoteColumns.SYMBOL, jsonObject.getString("symbol"));
-      builder.withValue(QuoteColumns.BIDPRICE, truncateBidPrice(jsonObject.getString("Bid")));
-      builder.withValue(QuoteColumns.PERCENT_CHANGE, truncateChange(
-          jsonObject.getString("ChangeinPercent"), true));
-      builder.withValue(QuoteColumns.CHANGE, truncateChange(change, false));
-      builder.withValue(QuoteColumns.ISCURRENT, 1);
-      if (change.charAt(0) == '-'){
-        builder.withValue(QuoteColumns.ISUP, 0);
-      }else{
-        builder.withValue(QuoteColumns.ISUP, 1);
-      }
+      String symbol  =jsonObject.getString("symbol");
+      String bid = jsonObject.getString("Bid");
+      String changeInPercent =  jsonObject.getString("ChangeinPercent");
+
+
+      Log.e("LOG_TAG", change + " " + symbol + " " + bid + " " + changeInPercent);
+
+        if (change.compareTo("null")!=0  && symbol.compareTo("null")!=0 && changeInPercent.compareTo("null")!=0)
+
+        {
+            builder.withValue(QuoteColumns.SYMBOL, symbol);
+            builder.withValue(QuoteColumns.BIDPRICE, truncateBidPrice(bid));
+            builder.withValue(QuoteColumns.PERCENT_CHANGE, truncateChange(changeInPercent, true));
+            builder.withValue(QuoteColumns.CHANGE, truncateChange(change, false));
+            builder.withValue(QuoteColumns.ISCURRENT, 1);
+            if (change.charAt(0) == '-') {
+                builder.withValue(QuoteColumns.ISUP, 0);
+            } else {
+                builder.withValue(QuoteColumns.ISUP, 1);
+            }
+
+        }
+        else {
+            builder.withValue(QuoteColumns.SYMBOL, symbol);
+            builder.withValue(QuoteColumns.BIDPRICE, "0.0");
+            builder.withValue(QuoteColumns.PERCENT_CHANGE, "0.0%");
+            builder.withValue(QuoteColumns.CHANGE, "0.0");
+            builder.withValue(QuoteColumns.ISCURRENT, 1);
+            builder.withValue(QuoteColumns.ISUP, 0);
+        }
 
     } catch (JSONException e){
       e.printStackTrace();
     }
+
+
     return builder.build();
   }
 }

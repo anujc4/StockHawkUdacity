@@ -21,6 +21,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.facebook.stetho.Stetho;
+import com.mikepenz.aboutlibraries.Libs;
+import com.mikepenz.aboutlibraries.LibsBuilder;
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
@@ -56,6 +59,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Stetho.initializeWithDefaults(this);
     mContext = this;
     ConnectivityManager cm =
         (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -83,15 +87,22 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     mCursorAdapter = new QuoteCursorAdapter(this, null);
     recyclerView.addOnItemTouchListener(new RecyclerViewItemClickListener(this,
             new RecyclerViewItemClickListener.OnItemClickListener() {
-              @Override public void onItemClick(View v, int position) {
-                //TODO:
-                // do something on item click
-              }
+                @Override
+                public void onItemClick(View v, int position) {
+                    //TODO:
+                    // do something on item click
+                    mCursor.moveToPosition(position);
+                    String id = mCursor.getString(mCursor.getColumnIndex(QuoteColumns._ID));
+                    Intent intent = new Intent(MyStocksActivity.this, DetailActivity.class);
+                    intent.putExtra("stock_id", id);
+                    startActivity(intent);
+                }
             }));
     recyclerView.setAdapter(mCursorAdapter);
 
 
     FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+      fab.setContentDescription(getString(R.string.add_stocks));
     fab.attachToRecyclerView(recyclerView);
     fab.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
@@ -189,7 +200,11 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
     //noinspection SimplifiableIfStatement
     if (id == R.id.action_settings) {
-      return true;
+
+      new LibsBuilder()
+              .withActivityStyle(Libs.ActivityStyle.DARK)
+              .withFields(R.string.class.getFields())
+              .start(this);
     }
 
     if (id == R.id.action_change_units){
